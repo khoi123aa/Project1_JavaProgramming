@@ -6,9 +6,9 @@ package model;
  */
 public class Room implements IRoom {
 
-    protected String roomNumber;
-    protected Double price;
-    protected RoomType enumeration;
+    private String roomNumber;
+    private Double price;
+    private RoomType enumeration;
 
     public Room(String roomNumber, Double price, RoomType enumeration) {
         this.roomNumber = roomNumber;
@@ -32,12 +32,12 @@ public class Room implements IRoom {
     }
 
     @Override
-    public boolean isFree() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Boolean isFree() {
+        return this.price == 0 ? true : false;
     }
 
     @Override
     public String toString() {
-        return "Room{" + "roomNumber=" + roomNumber + ", price=" + price + ", enumeration=" + enumeration + '}';
+        return "Room Number: " + this.roomNumber + " " + this.enumeration + " bed Room Price: $" + this.price;
     }
 }

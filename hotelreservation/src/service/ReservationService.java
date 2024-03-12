@@ -1,9 +1,8 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import model.Customer;
 import model.IRoom;
 import model.Reservation;
@@ -13,30 +12,80 @@ import model.Reservation;
  * @author KhoiTHA
  */
 public class ReservationService {
-    
-    private static final Map<String, IRoom> roomMap = new HashMap<String, IRoom>();
-    private static final Map<String, Collection<Reservation>> reservationMap = new HashMap<String, Collection<Reservation>>();
 
-    public void addRoom(IRoom room) {
+    private static final ArrayList<IRoom> rooms = new ArrayList<>();
+    private static final ArrayList<Reservation> reservations = new ArrayList<>();
+
+    public static void addRoom(IRoom room) {
+        rooms.add(room);
     }
 
-    public IRoom getARoom(String roomId) {
+    public static IRoom getARoom(String roomId) {
+        for (IRoom room : rooms) {
+            if (room.getRoomNumber().equals(roomId)) {
+                return room;
+            }
+        }
         return null;
     }
 
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
-        return null;
+    public static Collection<IRoom> getAllRooms() {
+        return rooms;
     }
 
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-        return null;
+    public static Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+        Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
+        reservations.add(reservation);
+        return reservation;
     }
 
-    public Collection<Reservation> getCustomersReservation(Customer customer) {
-        return null;
+    public static Collection<Reservation> findRoomsAreBooked(Date checkInDate, Date checkOutDate) {
+        ArrayList<Reservation> bookedRooms = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getCheckInDate().getTime() >= checkInDate.getTime()
+                    && reservation.getCheckOutDate().getTime() <= checkOutDate.getTime()) {
+                bookedRooms.add(reservation);
+            }
+        }
+        return bookedRooms;
     }
 
-    public void printAllReservation() {
+    public static Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+        ArrayList<Reservation> bookedRooms = new ArrayList<>(findRoomsAreBooked(checkInDate, checkOutDate));
+        ArrayList<IRoom> iRooms = new ArrayList<>();
+        for (Reservation reservation : bookedRooms) {
+            iRooms.add(reservation.getRoom());
+        }
+        ArrayList<IRoom> roomsAvailable = new ArrayList<>();
+        for (IRoom room : rooms) {
+            boolean isBooked = false;
+            for (IRoom bookedRoom : iRooms) {
+                if (room.equals(bookedRoom)) {
+                    isBooked = true;
+                    break;
+                }
+            }
+            if (!isBooked) {
+                roomsAvailable.add(room);
+            }
+        }
+        return roomsAvailable;
+    }
 
+    public static Collection<Reservation> getCustomersReservation(Customer customer) {
+        ArrayList<Reservation> matchingReservations = new ArrayList<>();
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getCustomer().getEmail().equals(customer.getEmail())) {
+                matchingReservations.add(reservation);
+            }
+        }
+        return matchingReservations;
+    }
+
+    public static void printAllReservation() {
+        for (Reservation reservation : reservations) {
+            System.out.println(reservation.toString());
+        }
     }
 }

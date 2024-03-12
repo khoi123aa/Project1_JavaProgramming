@@ -50,7 +50,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" + "firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", emailRegex=" + emailRegex + ", pattern=" + pattern + '}';
+        return "firstName:" + this.firstName + ", lastName:" + this.lastName + ", email:" + this.email;
     }
 
 }

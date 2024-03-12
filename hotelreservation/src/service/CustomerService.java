@@ -1,8 +1,7 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import model.Customer;
 
 /**
@@ -11,18 +10,23 @@ import model.Customer;
  */
 public class CustomerService {
 
-    private static Map<String, Customer> customerMap = new HashMap<String, Customer>();
+    private static ArrayList<Customer> customers = new ArrayList<>();
 
     public static void addCustomer(String email, String firstName, String lastName) {
         Customer newCustomer = new Customer(firstName, lastName, email);
-        customerMap.put(newCustomer.getEmail(), newCustomer);
+        customers.add(newCustomer);
     }
 
     public static Customer getCustomer(String customerEmail) {
-        return customerMap.get(customerEmail);
+        for (Customer customer : customers) {
+            if (customer.getEmail().equals(customerEmail)) {
+                return customer;
+            }
+        }
+        return null;
     }
 
     public static Collection<Customer> getAllCustomers() {
-        return customerMap.values();
+        return customers;
     }
 }

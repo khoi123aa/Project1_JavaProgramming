@@ -6,6 +6,7 @@ import model.Customer;
 import model.IRoom;
 import model.Reservation;
 import service.CustomerService;
+import service.ReservationService;
 
 /**
  *
@@ -22,18 +23,20 @@ public class HotelResource {
     }
 
     public static IRoom getRoom(String roomNumber) {
-        return null;
+        return ReservationService.getARoom(roomNumber);
     }
 
     public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
-        return null;
+        Customer customer = getCustomer(customerEmail);
+        return ReservationService.reserveARoom(customer, room, checkInDate, CheckOutDate);
     }
 
-    public static Collection<Reservation> getCustomerReservations(String customerEmail) {
-        return null;
+    public static Collection<Reservation> getCustomersReservations(String customerEmail) {
+        Customer customer = getCustomer(customerEmail);
+        return ReservationService.getCustomersReservation(customer);
     }
 
     public static Collection<IRoom> findARoom(Date checkIn, Date checkOut) {
-        return null;
+        return ReservationService.findRooms(checkIn, checkOut);
     }
 }
